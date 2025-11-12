@@ -1,0 +1,106 @@
+flashcards:
+  - id: 1
+    question: "Ce este DBA (Database Administration)?"
+    answer: "Funcția de gestionare, întreținere și securizare a bazelor de date pentru a asigura disponibilitatea, performanța și integritatea acestora prin modelarea datelor, monitorizarea performanței, securitate, copii de rezervă și optimizare."
+  - id: 2
+    question: "Care sunt principalele sarcini ale unui administrator DBA?"
+    answer: "Instalarea și actualizarea serverului, alocarea spațiului de stocare, modificarea structurii BD, înscrierea utilizatorilor, menținerea securității, monitorizarea performanței, backup și restore, contactarea furnizorului pentru suport."
+  - id: 3
+    question: "Care sunt cele două componente ale unui Server Oracle?"
+    answer: "Un server Oracle constă dintr-o Instanță Oracle și o Bază de Date Oracle."
+  - id: 4
+    question: "Ce este o Instanță Oracle?"
+    answer: "Este compusă dintr-o zonă de memorie numită SGA (System Global Area) și procese rulat în background utilizate de Oracle pentru gestiunea bazei de date. Este identificată prin ORACLE_SID."
+  - id: 5
+    question: "Ce este SGA (System Global Area)?"
+    answer: "O zonă de memorie alocată în memoria virtuală a sistemului Oracle care conține date și informații de control. Este de tip partajat (shared) între mai mulți utilizatori pentru a evita accesul repetat la disc."
+  - id: 6
+    question: "Care sunt componentele principale ale SGA?"
+    answer: "Buffer Cache, Redo Log Buffer, Shared Pool, Java Pool, Large Pool (opțional) și Streams Pool."
+  - id: 7
+    question: "Care este diferența dintre User și Utilizator în Oracle?"
+    answer: "User = cont de utilizator Oracle (ex: 'stud1' cu parolă). Utilizator = persoană sau proces/aplicație care folosește un cont de user pentru a interacționa cu Oracle."
+  - id: 8
+    question: "Ce sunt cele două procese create când o aplicație lucrează cu Oracle?"
+    answer: "Proces User (client) - pe mașina utilizatorului, asigură comunicația cu utilizatorul. Proces Server - pe mașina serverului Oracle, comunică cu serverul în numele procesului user."
+  - id: 9
+    question: "Ce este o Sesiune în Oracle?"
+    answer: "O conexiune a unui user cu serverul Oracle prin procesul server. Un user poate avea mai multe sesiuni deschise simultan pe aceeași BD sau pe mașini diferite."
+  - id: 10
+    question: "Ce face Procesul User?"
+    answer: "Rulează pe mașina utilizatorului, asigură interfața GUI/UPI, trimite comenzile către procesul server și afișează rezultatele."
+  - id: 11
+    question: "Care sunt cele trei tipuri principale de fișiere în Oracle?"
+    answer: "Fișiere de date (data files), Fișiere de control (control files) și Fișiere de jurnal (redo log files)."
+  - id: 12
+    question: "Ce conțin fișierele de date (Data Files)?"
+    answer: "Conțin dicționarul de date al BD, obiectele utilizatorului și vechile valori ale datelor modificate ('before image')."
+  - id: 13
+    question: "Ce rol au fișierele Redo Log?"
+    answer: "Conțin modificările făcute în baza de date și sunt necesare la reconstrucția ei în caz de incident. Fiecare BD conține cel puțin 2 astfel de fișiere."
+  - id: 14
+    question: "Ce conțin fișierele de control (Control Files)?"
+    answer: "Numele bazei de date, numele și locațiile fișierelor de date și redo log, timestamp-ul creării BD, numărul de secvență curent al jurnalului și informații despre checkpoint-uri."
+  - id: 15
+    question: "Care sunt cele trei etape de procesare a unei cereri SELECT?"
+    answer: "1. Parse (parsare) - analiza sintactică și semantică. 2. Execute (execuție) - cererea este executată. 3. Fetch (prelucrare) - liniile sunt trimise către user."
+  - id: 16
+    question: "Ce este Shared Pool?"
+    answer: "Parte a SGA responsabilă pentru memorarea în cache a diferitelor tipuri de date ale programului. Dimensiunea sa este dată de parametrul SHARED_POOL_SIZE."
+  - id: 17
+    question: "Ce este Library Cache?"
+    answer: "Componentă a Shared Pool care stochează formele executabile ale instrucțiunilor SQL și PL/SQL recent utilizate: textul cererii, arborele compilat și planul de execuție."
+  - id: 18
+    question: "Ce este Data Dictionary Cache?"
+    answer: "Zonă din Shared Pool care stochează informații (metadata) despre obiectele BD: descrieri tabele și coloane, date cont user, privilegii, etc."
+  - id: 19
+    question: "Ce este Database Buffer Cache?"
+    answer: "Zonă de memorie din SGA care stochează copii ale blocurilor de date citite din fișierele de date. Dimensiunea sa este dată de DB_BLOCK_BUFFERS și DB_BLOCK_SIZE."
+  - id: 20
+    question: "Ce algoritm folosește Oracle pentru gestionarea Database Buffer Cache?"
+    answer: "Algoritmul LRU (Least Recently Used) care elimină datele cel mai puțin recent accesate pentru a elibera spațiu. Excepție: full table scan."
+  - id: 21
+    question: "Ce este PGA (Program Global Area)?"
+    answer: "Regiune de memorie privată alocată pentru fiecare proces de server, care conține date necesare execuției: sort area, informații sesiune, starea cursorilor, stiva cu variabile."
+  - id: 22
+    question: "Ce este un Segment de Rollback?"
+    answer: "Structură care stochează imaginile anterioare (before-images) ale datelor, permițând anularea modificărilor unei tranzacții (ROLLBACK) și asigurând consistența datelor."
+  - id: 23
+    question: "Ce este Redo Log Buffer?"
+    answer: "Zonă de memorie din SGA care stochează temporar informații despre modificările de date (redo) înainte de scrierea pe fișierele de log. Dimensiunea dată de LOG_BUFFER."
+  - id: 24
+    question: "Care sunt procesele de background obligatorii în Oracle?"
+    answer: "DBWn (Database Writer), LGWR (Log Writer), CKPT (Checkpoint), SMON (System Monitor) și PMON (Process Monitor)."
+  - id: 25
+    question: "Ce face procesul DBWn (Database Writer)?"
+    answer: "Scrie blocurile de date modificate/inserate din buffer-ele de memorie în fișierele de pe disc. Pot fi maximum 20 de procese DBWn în Oracle 10g."
+  - id: 26
+    question: "Ce face procesul LGWR (Log Writer)?"
+    answer: "Scrie datele din Redo Log Buffer pe disc, secvențial într-un fișier de Redo Log. Scrie la COMMIT, timeout, când buffer-ul este plin sau înainte ca DBWR să scrie."
+  - id: 27
+    question: "Ce face procesul CKPT (Checkpoint)?"
+    answer: "Scrie periodic pe disc toate blocurile de date modificate din buffer-e, anunță DBWR, actualizează fișierele de date și control și înregistrează momentul checkpoint-ului."
+  - id: 28
+    question: "Ce face procesul SMON (System Monitor)?"
+    answer: "Face verificarea consistenței datelor și inițiază recuperarea după incident când o instanță Oracle care a avut un incident repornește."
+  - id: 29
+    question: "Ce face procesul PMON (Process Monitor)?"
+    answer: "Dealocă resursele unui proces care are un incident. Este folosit pentru gestionarea proceselor cu incidente."
+  - id: 30
+    question: "Când scrie Database Writer (DBWR) pe disc?"
+    answer: "Când numărul de 'dirty blocks' depășește o valoare, când nu se găsesc locuri libere în buffer, la timeout (la fiecare N secunde) sau la evenimente care forțează checkpoint."
+  - id: 31
+    question: "Ce se întâmplă la un COMMIT în Oracle?"
+    answer: "Procesul server plasează o înregistrare de commit cu SCN în Redo Log Buffer, LGWR scrie în fișierele Redo Log, user-ul este informat, tranzacția este marcată completă și resursele sunt eliberate."
+  - id: 32
+    question: "Ce este SCN (System Change Number)?"
+    answer: "Număr de tip timestamp asignat fiecărei tranzacții comise. Aceste numere sunt crescătoare și unice la nivelul bazei de date."
+  - id: 33
+    question: "Care sunt cele trei categorii de procese Background?"
+    answer: "A. Obligatorii (DBWn, LGWR, CKPT, SMON, PMON, MMON, MMNL, RECO). B. Opționale (ARCn, Job Queue Processes, FBDA, SMCO). C. Procese 'slave' lansate de alte procese."
+  - id: 34
+    question: "Ce parametri identifică o instanță și o bază de date Oracle?"
+    answer: "Instanța este identificată prin ORACLE_SID (System ID). Baza de date este identificată prin DB_NAME. Oracle recomandă ca acestea să aibă același nume."
+  - id: 35
+    question: "Care sunt cele trei arhitecturi de lucru cu Oracle Server?"
+    answer: "1. Client pe aceeași mașină cu serverul (ex: SQL*Plus). 2. Clientul rulează pe altă mașină (two-tiered). 3. Aplicația user accesează altă aplicație care comunică cu serverul (three-tiered)."

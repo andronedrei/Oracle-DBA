@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oracle Database Course 5 - Gestiunea Tabelelor</title>
+    <style>
+        :root {
+            /* Primitive Color Tokens */
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-teal-800: rgba(41, 150, 161, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-red-500: rgba(192, 21, 47, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-orange-500: rgba(168, 75, 47, 1);
+
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+            --color-slate-500-rgb: 98, 108, 113;
+
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-primary-active: var(--color-teal-700);
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+
+            --font-family-base: 'Segoe UI', 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-size-base: 14px;
+            --font-size-lg: 16px;
+            --font-size-xl: 18px;
+            --font-size-2xl: 20px;
+            --font-size-3xl: 24px;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 550;
+            --font-weight-bold: 600;
+
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+
+            --radius-base: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+            --duration-normal: 250ms;
+            --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-gray-400-rgb: 119, 124, 124;
+                --color-teal-300-rgb: 50, 184, 198;
+                --color-gray-300-rgb: 167, 169, 169;
+                --color-gray-200-rgb: 245, 245, 245;
+
+                --color-background: var(--color-charcoal-700);
+                --color-surface: var(--color-charcoal-800);
+                --color-text: var(--color-gray-200);
+                --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+                --color-primary: var(--color-teal-300);
+                --color-primary-hover: var(--color-teal-400);
+                --color-primary-active: var(--color-teal-800);
+                --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-base);
+            background: linear-gradient(135deg, #27AE60 0%, #229954 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-20);
+            color: var(--color-white);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            animation: fadeIn 0.6s var(--ease-standard);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: var(--space-32);
+        }
+
+        h1 {
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-12);
+            color: var(--color-white);
+        }
+
+        .progress {
+            font-size: var(--font-size-lg);
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .card-container {
+            perspective: 1000px;
+            margin-bottom: var(--space-32);
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s var(--ease-standard);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius-xl);
+            padding: var(--space-32);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+            transition: box-shadow 0.3s var(--ease-standard);
+        }
+
+        .card:hover .card-face {
+            box-shadow: 0 25px 35px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #27AE60 0%, #229954 100%);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #1E8449 0%, #196F3D 100%);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            transform: rotateY(180deg);
+        }
+
+        .card-label {
+            font-size: var(--font-size-base);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: var(--space-16);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .card-content {
+            font-size: var(--font-size-xl);
+            line-height: 1.6;
+            color: var(--color-white);
+            overflow-y: auto;
+            max-height: 320px;
+            padding: var(--space-8);
+        }
+
+        .card-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .card-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .card-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        .card-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .controls {
+            display: flex;
+            gap: var(--space-12);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: var(--space-16);
+        }
+
+        .btn {
+            padding: var(--space-12) var(--space-24);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-semibold);
+            border: none;
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            transition: all 0.2s var(--ease-standard);
+            user-select: none;
+            font-family: var(--font-family-base);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid rgba(255, 255, 255, 0.5);
+            outline-offset: 2px;
+        }
+
+        .btn-primary {
+            background: rgba(255, 255, 255, 0.95);
+            color: #27AE60;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-white);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--color-white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn:disabled:hover {
+            transform: none;
+            box-shadow: var(--shadow-md);
+        }
+
+        .hint {
+            text-align: center;
+            font-size: var(--font-size-base);
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: var(--space-16);
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: var(--space-16);
+            }
+
+            h1 {
+                font-size: var(--font-size-2xl);
+            }
+
+            .card {
+                height: 350px;
+            }
+
+            .card-face {
+                padding: var(--space-24);
+            }
+
+            .card-content {
+                font-size: var(--font-size-lg);
+                max-height: 270px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: rotateY(180deg) scale(1);
+            }
+            50% {
+                transform: rotateY(180deg) scale(1.05);
+            }
+        }
+
+        .card.flipped .card-back {
+            animation: bounce 0.3s var(--ease-standard) 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Oracle Database Course 5 - Gestiunea Tabelelor</h1>
+            <div class="progress" id="progress">Card 1 / 39</div>
+        </header>
+
+        <div class="card-container">
+            <div class="card" id="flashcard" role="button" tabindex="0" aria-label="Flashcard - Click to flip">
+                <div class="card-face card-front">
+                    <div class="card-label">Întrebare</div>
+                    <div class="card-content" id="question"></div>
+                </div>
+                <div class="card-face card-back">
+                    <div class="card-label">Răspuns</div>
+                    <div class="card-content" id="answer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="prevBtn" aria-label="Previous card">
+                ← Previous
+            </button>
+            <button class="btn btn-primary" id="nextBtn" aria-label="Next card">
+                Next →
+            </button>
+            <button class="btn btn-secondary" id="shuffleBtn" aria-label="Shuffle cards">
+                🔀 Shuffle
+            </button>
+            <button class="btn btn-secondary" id="resetBtn" aria-label="Reset to original order">
+                ↺ Reset
+            </button>
+        </div>
+
+        <div class="hint">
+            💡 Click the card or press Space to flip | Use Arrow keys to navigate
+        </div>
+    </div>
+
+    <script>
+        // Flashcard data for Course 5: Gestiunea Tabelelor (Table Management)
+        const flashcardsData = [
+            { id: 1, question: "Ce sunt tabelele în Oracle?", answer: "Unități de stocare a datelor care conțin rânduri și coloane. Se pot crea, vizualiza, edita sau șterge folosind comenzi SQL DDL." },
+            { id: 2, question: "Ce operații de gestionare se pot efectua asupra tabelelor?", answer: "Creare (CREATE), Vizualizare (SELECT), Editare (ALTER), Ștergere (DROP). Toate se fac cu comenzi DDL SQL." },
+            { id: 3, question: "Ce sunt tabelele heap-organized?", answer: "Tip de bază uzual. Stochează date nestructurate neordonat, plasând noi rânduri în spațiul disponibil. Inserări rapide, dar recuperare lentă fără indecși." },
+            { id: 4, question: "Ce sunt tabelele partitionate?", answer: "Tabelele împărțite în mai multe grupuri numite partiții. Fiecare partiție se gestiona separat, îmbunătățind performanța și administrarea pentru tabele mari." },
+            { id: 5, question: "Ce sunt tabelele de tip cluster?", answer: "Tabele parte a unui cluster, grupate cu alte tabele care au coloane comune și se folosesc frecvent împreună (ex: EMP și DEPT pe DEPTNO)." },
+            { id: 6, question: "Ce sunt tabelele index-organized (IOT)?", answer: "Tabele unde înregistrările sunt organizate sub formă de arbore B, sortate după cheia primară. Oferă beneficii de performanță pentru căutări bazate pe cheie." },
+            { id: 7, question: "Ce sunt tabelele externe?", answer: "Tabele doar pentru citire care permit interogarea datelor din fișiere externe (OS, HDFS). Metadata e în BD, datele rămân externe. Se citesc cu driver de acces." },
+            { id: 8, question: "Ce sunt tabelele hibride partitionate?", answer: "Tabele partitionate cu unele partiții în BD și altele în fișiere externe (OS, HDFS). Au apărut în versiunea 19c." },
+            { id: 9, question: "Cum se face împărțirea în partiții pentru tabelele partitionate?", answer: "După valoarea uneia sau mai multor coloane. Un rând aparține unei singure partiții. Fiecare partiție are un nume și segment, poate fi în tablespace diferit." },
+            { id: 10, question: "Ce condiții au tabelele partitionate?", answer: "Se practică pentru tabele mari accesate concurent. Se pot partitiona și tabelele IOT dacă atributele de partiționare sunt submulțime a cheii primare." },
+            { id: 11, question: "Ce este hyperscale computing?", answer: "Arhitectură de calcul care se scalează rapid sus/jos pentru a satisface cererea crescândă. Folosește sharding de BD." },
+            { id: 12, question: "Ce este sharding de baze de date?", answer: "Tehnică ce distribuie segmente ale unui set de date (shard-uri) pe numeroase BD pe computere diferite, folosind arhitectură shared-nothing." },
+            { id: 13, question: "Ce este Oracle Sharding?", answer: "Tehnică de scalabilitate care împarte orizontal datele dintr-o tabelă pe mai multe BD independente numite shard-uri, cu resurse proprii, formând o BD logică." },
+            { id: 14, question: "Care sunt metodele de sharding în Oracle?", answer: "1. Sharding auto-gestionat (hash consistent). 2. Sharding definit de utilizator (JSON, BLOB, CLOB, date spațiale). 3. Sharding compozit (două niveluri)." },
+            { id: 15, question: "Care sunt beneficiile Oracle Sharding?", answer: "Scalabilitate liniară, disponibilitate ridicată (HA), recuperare în caz dezastru (DR), consistență puternică, suport SQL și ecosistem Oracle." },
+            { id: 16, question: "Ce este PCTFREE în CREATE TABLE?", answer: "Procentul de spațiu din fiecare bloc rezervat creșterii rândurilor prin UPDATE. Valori 1-99, implicit 10 (10% pentru UPDATE, 90% pentru INSERT)." },
+            { id: 17, question: "Ce este PCTUSED în CREATE TABLE?", answer: "Procentajul minim de spațiu utilizat. Sub această valoare, blocul devine candidat pentru INSERT. Valori 1-99, implicit 40. PCTFREE + PCTUSED <= 100." },
+            { id: 18, question: "Ce este INITRANS în CREATE TABLE?", answer: "Numărul inițial de transaction entries alocate în fiecare bloc. Valori 1-255, implicit 1 (tabel) sau 2 (index). Recomandare: păstreaza implicit." },
+            { id: 19, question: "Ce este MAXTRANS în CREATE TABLE?", answer: "Numărul maxim de tranzacții concurente care pot actualiza un bloc. Se alocă dinamic după INITRANS. Implicit 255. Depreciat în 19c - Oracle aloca automat." },
+            { id: 20, question: "Ce sunt clauzele TABLESPACE și STORAGE?", answer: "TABLESPACE: specifică unde se crează tabela (implicit: default user). STORAGE: specifică alocarea extensiilor (INITIAL, NEXT, PCTINCREASE, etc.)." },
+            { id: 21, question: "Ce este PARALLEL în CREATE TABLE?", answer: "Specifică paralelizarea pentru CREATE...AS SELECT sau DOP pentru cereri DML. Se poate specifica nr. de procese sau implicit (nr_CPU x thread-uri per CPU)." },
+            { id: 22, question: "Ce este NOPARALLEL în CREATE TABLE?", answer: "Specifică că cererile pe tabelă nu pot fi executate prin paralelizare. Se pot forța cu hint-uri PARALLEL în SELECT." },
+            { id: 23, question: "Ce sunt hint-urile FULL și PARALLEL?", answer: "FULL(s): forțează full table scan, ignoră indexuri. PARALLEL(s, 5): forțează execuție paralelă cu 5 procese pe tabelul s." },
+            { id: 24, question: "Ce este CACHE în CREATE TABLE?", answer: "Specifică că tabela se păstrează în buffere memorie (nu se dealocă) chiar la full table scan. Util pentru tabele mici. NOCACHE e implicit." },
+            { id: 25, question: "Ce este LOGGING vs NOLOGGING?", answer: "LOGGING (implicit): modificări se înregistrează în Redo Log. NOLOGGING: creare și unele operații nu se înregistrează (nu recomandat)." },
+            { id: 26, question: "Ce este CLUSTER în CREATE TABLE?", answer: "Arată că tabela e parte a unui cluster. Se specifică coloanele tabelei care corespund coloanelor clusterului (poziție, nu nume)." },
+            { id: 27, question: "Ce condiții au tabelele de tip CLUSTER?", answer: "Nu se pot folosi în paralel PCTFREE, PCTUSED, INITRANS, MAXTRANS, TABLESPACE cu clauza CLUSTER." },
+            { id: 28, question: "Ce este ENABLE/DISABLE în CREATE TABLE?", answer: "Activează/inhibă o constrângere de integritate. Implicit, constrangerile sunt active (ENABLE)." },
+            { id: 29, question: "Ce face clauza AS în CREATE TABLE?", answer: "Specifica că noua tabelă va fi populată cu rândurile din SELECT din clauzei AS. NU se copiază constrangeri (excepție: NOT NULL)." },
+            { id: 30, question: "Ce sunt tabelele temporare globale (GTT)?", answer: "Obiecte cu structură permanentă dar date private, vizibile doar în sesiune/tranzacție. Definiția e vizibilă tuturor, datele numai sesiunii care le inseră." },
+            { id: 31, question: "Care sunt caracteristicile GTT?", answer: "Structură persistentă, date private, ștergere automată la final sesiune/tranzacție, performanță îmbunătățită (mai puțin redo/undo)." },
+            { id: 32, question: "Ce sunt clauzele ON COMMIT pentru GTT?", answer: "ON COMMIT DELETE ROWS: ștergere la final tranzacție. ON COMMIT PRESERVE ROWS: ștergere la final sesiune." },
+            { id: 33, question: "Cum se crează o tabelă temporară globală?", answer: "CREATE GLOBAL TEMPORARY TABLE tab_name (...) ON COMMIT DELETE ROWS; sau ON COMMIT PRESERVE ROWS;" },
+            { id: 34, question: "Cum se copiază o tabelă în Oracle?", answer: "Folosind CREATE TABLE...AS SELECT, se poate copia și schimba parametrii. Constrangerile NU se copiază (except. NOT NULL)." },
+            { id: 35, question: "Ce este SIZE în CREATE CLUSTER?", answer: "Parametrul SIZE specifică dimensiunea unei intrări în clusterul - spațiu alocat pentru rânduri cu aceeași valoare de cheie de cluster." },
+            { id: 36, question: "Ce este indexul pe un cluster?", answer: "Se creează cu CREATE INDEX tab_name ON CLUSTER cluster_name pe cheia clusterului pentru a accelera accesul la rânduri din cluster." },
+            { id: 37, question: "Care sunt avantajele folosirii mai multor TABLESPACE-uri?", answer: "Separare date user de sistem, izolarea aplicații, stocare pe discuri diferite, optimizare performanță, backup selectiv, control acces spațiu." },
+            { id: 38, question: "Ce vederi oferă informații despre tabele în Oracle?", answer: "DBA_TABLES, DBA_TAB_COLUMNS (coloane), DBA_TAB_PARTITIONS (partiții), USER_TABLES, ALL_TABLES, etc." },
+            { id: 39, question: "Ce diferență este între tabelele DMT și LMT?", answer: "DMT (Dictionary Managed): gestiune prin dicționar. LMT (Locally Managed): gestiune locală. Tablespace-ul o determină la CREATE TABLE." }
+        ];
+
+        // State management (in-memory)
+        let currentIndex = 0;
+        let isFlipped = false;
+        let currentDeck = [...flashcardsData];
+        let originalDeck = [...flashcardsData];
+
+        // DOM elements
+        const flashcard = document.getElementById('flashcard');
+        const questionEl = document.getElementById('question');
+        const answerEl = document.getElementById('answer');
+        const progressEl = document.getElementById('progress');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // Initialize the app
+        function init() {
+            renderCard();
+            updateProgress();
+            updateButtonStates();
+        }
+
+        // Render current card
+        function renderCard() {
+            const card = currentDeck[currentIndex];
+            questionEl.textContent = card.question;
+            answerEl.textContent = card.answer;
+            
+            // Reset flip state when changing cards
+            if (isFlipped) {
+                flipCard();
+            }
+        }
+
+        // Flip the card
+        function flipCard() {
+            isFlipped = !isFlipped;
+            flashcard.classList.toggle('flipped');
+        }
+
+        // Update progress indicator
+        function updateProgress() {
+            progressEl.textContent = `Card ${currentIndex + 1} / ${currentDeck.length}`;
+        }
+
+        // Update button states
+        function updateButtonStates() {
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === currentDeck.length - 1;
+        }
+
+        // Navigate to previous card
+        function previousCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderCard();
+                updateProgress();
+                updateButtonStates();
+            }
+        }
+
+        // Navigate to next card
+        function nextCard() {
+            if (currentIndex < currentDeck.length - 1) {
+                currentIndex++;
+                renderCard();
+                updateProgress();
+                updateButtonStates();
+            }
+        }
+
+        // Shuffle the deck
+        function shuffleDeck() {
+            const shuffled = [...currentDeck];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            currentDeck = shuffled;
+            currentIndex = 0;
+            renderCard();
+            updateProgress();
+            updateButtonStates();
+        }
+
+        // Reset to original order
+        function resetDeck() {
+            currentDeck = [...originalDeck];
+            currentIndex = 0;
+            renderCard();
+            updateProgress();
+            updateButtonStates();
+        }
+
+        // Event listeners
+        flashcard.addEventListener('click', flipCard);
+        
+        flashcard.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                flipCard();
+            }
+        });
+
+        prevBtn.addEventListener('click', previousCard);
+        nextBtn.addEventListener('click', nextCard);
+        shuffleBtn.addEventListener('click', shuffleDeck);
+        resetBtn.addEventListener('click', resetDeck);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            // Avoid triggering when typing in input fields
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            switch(e.key) {
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    previousCard();
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    nextCard();
+                    break;
+                case ' ':
+                    if (e.target !== flashcard) {
+                        e.preventDefault();
+                        flipCard();
+                    }
+                    break;
+            }
+        });
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>

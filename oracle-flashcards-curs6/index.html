@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oracle Database Course 6 - Gestiunea Tabelelor Continuare</title>
+    <style>
+        :root {
+            /* Primitive Color Tokens */
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-teal-800: rgba(41, 150, 161, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-red-500: rgba(192, 21, 47, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-orange-500: rgba(168, 75, 47, 1);
+
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+            --color-slate-500-rgb: 98, 108, 113;
+
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-primary-active: var(--color-teal-700);
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+
+            --font-family-base: 'Segoe UI', 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-size-base: 14px;
+            --font-size-lg: 16px;
+            --font-size-xl: 18px;
+            --font-size-2xl: 20px;
+            --font-size-3xl: 24px;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 550;
+            --font-weight-bold: 600;
+
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+
+            --radius-base: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+            --duration-normal: 250ms;
+            --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-gray-400-rgb: 119, 124, 124;
+                --color-teal-300-rgb: 50, 184, 198;
+                --color-gray-300-rgb: 167, 169, 169;
+                --color-gray-200-rgb: 245, 245, 245;
+
+                --color-background: var(--color-charcoal-700);
+                --color-surface: var(--color-charcoal-800);
+                --color-text: var(--color-gray-200);
+                --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+                --color-primary: var(--color-teal-300);
+                --color-primary-hover: var(--color-teal-400);
+                --color-primary-active: var(--color-teal-800);
+                --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-base);
+            background: linear-gradient(135deg, #C0392B 0%, #922B21 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-20);
+            color: var(--color-white);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            animation: fadeIn 0.6s var(--ease-standard);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: var(--space-32);
+        }
+
+        h1 {
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-12);
+            color: var(--color-white);
+        }
+
+        .progress {
+            font-size: var(--font-size-lg);
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .card-container {
+            perspective: 1000px;
+            margin-bottom: var(--space-32);
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s var(--ease-standard);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius-xl);
+            padding: var(--space-32);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+            transition: box-shadow 0.3s var(--ease-standard);
+        }
+
+        .card:hover .card-face {
+            box-shadow: 0 25px 35px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #922B21 0%, #7B241C 100%);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            transform: rotateY(180deg);
+        }
+
+        .card-label {
+            font-size: var(--font-size-base);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: var(--space-16);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .card-content {
+            font-size: var(--font-size-xl);
+            line-height: 1.6;
+            color: var(--color-white);
+            overflow-y: auto;
+            max-height: 320px;
+            padding: var(--space-8);
+        }
+
+        .card-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .card-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .card-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        .card-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .controls {
+            display: flex;
+            gap: var(--space-12);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: var(--space-16);
+        }
+
+        .btn {
+            padding: var(--space-12) var(--space-24);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-semibold);
+            border: none;
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            transition: all 0.2s var(--ease-standard);
+            user-select: none;
+            font-family: var(--font-family-base);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid rgba(255, 255, 255, 0.5);
+            outline-offset: 2px;
+        }
+
+        .btn-primary {
+            background: rgba(255, 255, 255, 0.95);
+            color: #C0392B;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-white);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--color-white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn:disabled:hover {
+            transform: none;
+            box-shadow: var(--shadow-md);
+        }
+
+        .hint {
+            text-align: center;
+            font-size: var(--font-size-base);
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: var(--space-16);
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: var(--space-16);
+            }
+
+            h1 {
+                font-size: var(--font-size-2xl);
+            }
+
+            .card {
+                height: 350px;
+            }
+
+            .card-face {
+                padding: var(--space-24);
+            }
+
+            .card-content {
+                font-size: var(--font-size-lg);
+                max-height: 270px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: rotateY(180deg) scale(1);
+            }
+            50% {
+                transform: rotateY(180deg) scale(1.05);
+            }
+        }
+
+        .card.flipped .card-back {
+            animation: bounce 0.3s var(--ease-standard) 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Oracle Database Course 6 - Gestiunea Tabelelor Continuare</h1>
+            <div class="progress" id="progress">Card 1 / 38</div>
+        </header>
+
+        <div class="card-container">
+            <div class="card" id="flashcard" role="button" tabindex="0" aria-label="Flashcard - Click to flip">
+                <div class="card-face card-front">
+                    <div class="card-label">Întrebare</div>
+                    <div class="card-content" id="question"></div>
+                </div>
+                <div class="card-face card-back">
+                    <div class="card-label">Răspuns</div>
+                    <div class="card-content" id="answer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="prevBtn" aria-label="Previous card">
+                ← Previous
+            </button>
+            <button class="btn btn-primary" id="nextBtn" aria-label="Next card">
+                Next →
+            </button>
+            <button class="btn btn-secondary" id="shuffleBtn" aria-label="Shuffle cards">
+                🔀 Shuffle
+            </button>
+            <button class="btn btn-secondary" id="resetBtn" aria-label="Reset to original order">
+                ↺ Reset
+            </button>
+        </div>
+
+        <div class="hint">
+            💡 Click the card or press Space to flip | Use Arrow keys to navigate
+        </div>
+    </div>
+
+    <script>
+        // Flashcard data for Course 6: Gestiunea Tabelelor - Continuare (Table Management Continued)
+        const flashcardsData = [
+            { id: 1, question: "Ce este Oracle Real Application Clusters (RAC)?", answer: "Arhitectură de BD de înaltă disponibilitate care utilizează multiple servere conectate care accesează aceleași fișiere, oferind o singură BD unificată cu toleranță la erori." },
+            { id: 2, question: "Cum funcționează Oracle RAC?", answer: "Cluster de servere hardware conectate rulează mai multe instanțe ale aceleiași BD. Toate accesează același set de fișiere pe stocare partajată. Dacă un nod eșuează, altele preiau sarcinile." },
+            { id: 3, question: "Care sunt beneficiile Oracle RAC?", answer: "Disponibilitate continuă indiferent de defecțiuni hardware, scalabilitate liniară, throughput mai mare, toleranță la erori, transparență pentru aplicații." },
+            { id: 4, question: "Ce este comanda ALTER TABLE?", answer: "Comandă SQL pentru a modifica structura unui tabel existent: adăugare coloane, ștergere, modificare proprietăți, adăugare/ștergere constrângeri." },
+            { id: 5, question: "Ce face clauza ALLOCATE EXTENT în ALTER TABLE?", answer: "Alocă explicit o nouă extensie pentru tabelă. SIZE specifică dimensiune, DATAFILE specifică fișierul, INSTANCE o face disponibilă unei instanțe (util în RAC)." },
+            { id: 6, question: "Ce sunt ENABLE TABLE LOCK și DISABLE TABLE LOCK?", answer: "ENABLE: Activează posibilitatea DDL să obțină blocări pe tabelă (sunt necesare pentru execuție). DISABLE: Interzice operații DDL pe tabelă." },
+            { id: 7, question: "Ce sunt ENABLE/DISABLE ALL TRIGGERS?", answer: "Activează/dezactivează toți declanșatorii (triggers) asociați unei tabele. Pentru un singur trigger se folosește ALTER TRIGGER." },
+            { id: 8, question: "Ce este un trigger în Oracle?", answer: "Bloc PL/SQL stocat în BD care se execută automat ca răspuns la INSERT, UPDATE sau DELETE. Automatizează sarcini, impune reguli de afaceri, asigură integritate date." },
+            { id: 9, question: "Ce are loc cu ALTER TABLE PCTFREE?", answer: "Schimbă procentul spațiu liber din fiecare bloc pentru UPDATE. PCTFREE mai mare reduce migrarea rândurilor dar scade densitate date. Afectează doar blocuri viitoare." },
+            { id: 10, question: "Ce este row migration?", answer: "Proces în care un rând se mută complet dintr-un bloc în altul când UPDATE-ul crește dimensiunea. Oracle lasă forwarding pointer în blocul original ca indecșii să-l găsească." },
+            { id: 11, question: "Ce are loc cu ALTER TABLE PCTUSED?", answer: "Modifica procentul minim de ocupare al unui bloc peste care este considerat eligibil pentru INSERT-uri. PCTUSED mai mare = reutilizare mai rapidă după ștergeri." },
+            { id: 12, question: "Ce este Interested Transaction List (ITL)?", answer: "Element din blocuri care gestionează blocări de rânduri. Stochează info despre tranzacțiile care modifică datele. Dacă ITL plin, alte tranzacții așteptă slot liber." },
+            { id: 13, question: "Ce face ALTER TABLE INITRANS?", answer: "Crește numărul inițial de sloturi de tranzacție în bloc. Îmbunătățește concurența la nivel bloc în medii cu UPDATE-uri concurente. Afectează blocuri viitoare." },
+            { id: 14, question: "Ce este MAXTRANS în ALTER TABLE?", answer: "Stabilea numărul maxim de ITL-uri în bloc. În Oracle 10g+, este ignorat deoarece Oracle gestionează automat creșterea ITL-urilor în limita spațiului disponibil." },
+            { id: 15, question: "Ce parametri se pot modifica cu ALTER TABLE STORAGE?", answer: "INITIAL, NEXT, PCTINCREASE, MAXEXTENTS, FREELISTS, FREELIST GROUPS. Modificările afectează doar extensii viitoare." },
+            { id: 16, question: "Ce este High Water Mark (HWM)?", answer: "Marcaj al ultimului bloc vreodată utilizat pentru orice segment. Se mută când se insertează date, dar NU se resetează la ștergeri (doar la TRUNCATE)." },
+            { id: 17, question: "Ce se întâmplă la full table scan cu HWM?", answer: "Se citesc toate blocurile până la HWM, inclusiv cele goale din ștergeri. Dacă tabelul are mult spațiu fragmentat, scanarea e lentă." },
+            { id: 18, question: "Ce face ALTER TABLE MOVE?", answer: "Mută tabelă dintr-un tablespace în altul (pot fi același). Compactează datele și resetează HWM. Indecșii devin UNUSABLE și trebuie refăcuți (ROWID se schimbă)." },
+            { id: 19, question: "Ce este Automatic Segment Space Management (ASSM)?", answer: "Metodă de gestiune automată a spațiului liber în blocuri folosind bitmaps. Elimină configurare manuală a PCTUSED, FREELISTS. Oferă concurență sporită și performanță mai bună." },
+            { id: 20, question: "Ce face ALTER TABLE SHRINK SPACE?", answer: "Compactează rânduri, eliberează blocuri goale, reduce HWM. Necesită ASSM și ENABLE ROW MOVEMENT. Compactează și defragmentează cu impact I/O redus." },
+            { id: 21, question: "Ce face ALTER TABLE SHRINK SPACE CASCADE?", answer: "La fel ca SHRINK SPACE dar extinde operația și la obiecte dependente: indecși, LOB segments, materialized view logs." },
+            { id: 22, question: "Ce face ALTER TABLE SHRINK SPACE COMPACT?", answer: "Mută doar rânduri fără a muta HWM. Rearanjează pentru eliminare goluri interne. Operație pregătitoare, permite împărțire în etape: compactare apoi eliberare." },
+            { id: 23, question: "Ce restricții au comenzile SHRINK?", answer: "Doar în tablespace-uri ASSM. NU se pot compacta: Undo, Temporary, Cluster tables, Coloane LONG, LOB indexes." },
+            { id: 24, question: "Ce face ALTER TABLE DEALLOCATE UNUSED?", answer: "Dealoaca spațiu liber după HWM. KEEP specifică cât spațiu se păstrează (KEEP 0 dealocă tot). Spațiu dealocat poate fi folosit de alte segmente." },
+            { id: 25, question: "Ce face comanda TRUNCATE TABLE?", answer: "Golește tabelă și resetează HWM. Dealoaca extensii (implicit DROP STORAGE). DDL - automat commit, nu se poate face rollback." },
+            { id: 26, question: "Care este diferența dintre TRUNCATE DROP STORAGE și REUSE?", answer: "DROP: dealocă extensii peste MINEXTENTS, resetează HWM. REUSE: păstrează spațiu pentru reuse viitor. DROP mai rapid." },
+            { id: 27, question: "Ce face DROP TABLE?", answer: "Șterge tabelă și constrângerile sale. CASCADE CONSTRAINTS șterge și constrângerile referențiale. Fără CASCADE nu se poate șterge dacă alte tabele o referă." },
+            { id: 28, question: "Ce face ANALYZE TABLE VALIDATE STRUCTURE?", answer: "Verifică integritate structură tabelă - toate blocuri sunt verificate. CASCADE validează și indecși asociați cu verificare încrucișată tabel-indecș." },
+            { id: 29, question: "Ce face ANALYZE TABLE COMPUTE STATISTICS?", answer: "Colectează statistici prin parcurgere completă a tabelei. Stochează în dicționarul de date pentru optimizator. Precis dar mai lent." },
+            { id: 30, question: "Ce face ANALYZE TABLE ESTIMATE STATISTICS?", answer: "Estimează statistici pe baza eșantion. Se specifică SAMPLE în linii/procente (implicit 1064 linii). Mai rapid decât COMPUTE." },
+            { id: 31, question: "Ce folosire au ANALYZE cu migrare/înlănțuire?", answer: "Detectează rânduri care au migrat (PCTUSED) sau sunt înlănțuite (prea voluminoase). Ajută la optimizare și restructurare tabelă." },
+            { id: 32, question: "Ce vederi sunt disponibile pentru tabele?", answer: "DBA_TABLES, DBA_OBJECTS, DBA_SEGMENTS (pot fi unite pe OWNER și nume). USER_TABLES, ALL_TABLES pentru variante user/all." },
+            { id: 33, question: "Ce informații oferă DBA_EXTENTS?", answer: "Coloane: OWNER, SEGMENT_NAME, EXTENT_ID, FILE_ID, BLOCK_ID, BLOCKS. Fiecare rând = o extensie cu info dimensiune." },
+            { id: 34, question: "Ce pachet sistem oferă info despre spațiu?", answer: "DBMS_SPACE pachetul sistem Oracle oferă informații despre spațiul utilizat în segmente și recomandări pentru optimizare." },
+            { id: 35, question: "Ce condiții trebuie pentru ENABLE ROW MOVEMENT?", answer: "Necesară pentru SHRINK SPACE. Permite Oracle să schimbe ROWID-uri liniilor în timpul compactării. ALTER TABLE tab ENABLE ROW MOVEMENT;" },
+            { id: 36, question: "Ce vederi se pot folosi pentru JOIN cu DBA_TABLES?", answer: "JOIN cu DBA_OBJECTS și DBA_SEGMENTS pe OWNER și nume (TABLE_NAME = OBJECT_NAME = SEGMENT_NAME) pentru info complete." },
+            { id: 37, question: "Ce este USER_SEGMENTS vederea?", answer: "Vizualizare internă cu info despre tabele, indecși, LOB segments, partition segments și dimensiunile lor fizice din tablespace." },
+            { id: 38, question: "Ce se întâmplă cu indecșii după ALTER TABLE MOVE?", answer: "Indecșii devin UNUSABLE (ROWID se schimbă). Trebuie refăcuți cu ALTER INDEX index_name REBUILD;" }
+        ];
+
+        // State management (in-memory)
+        let currentIndex = 0;
+        let isFlipped = false;
+        let currentDeck = [...flashcardsData];
+        let originalDeck = [...flashcardsData];
+
+        // DOM elements
+        const flashcard = document.getElementById('flashcard');
+        const questionEl = document.getElementById('question');
+        const answerEl = document.getElementById('answer');
+        const progressEl = document.getElementById('progress');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // Initialize the app
+        function init() {
+            renderCard();
+            updateProgress();
+            updateButtonStates();
+        }
+
+        // Render current card
+        function renderCard() {
+            const card = currentDeck[currentIndex];
+            questionEl.textContent = card.question;
+            answerEl.textContent = card.answer;
+            
+            // Reset flip state when changing cards
+            if (isFlipped) {
+                flipCard();
+            }
+        }
+
+        // Flip the card
+        function flipCard() {
+            isFlipped = !isFlipped;
+            flashcard.classList.toggle('flipped');
+        }
+
+        // Update progress indicator
+        function updateProgress() {
+            progressEl.textContent = `Card ${currentIndex + 1} / ${currentDeck.length}`;
+        }
+
+        // Update button states
+        function updateButtonStates() {
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === currentDeck.length - 1;
+        }
+
+        // Navigate to previous card
+        function previousCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderCard();
+                updateProgress();
+                updateButtonStates();
+            }
+        }
+
+        // Navigate to next card
+        function nextCard() {
+            if (currentIndex < currentDeck.length - 1) {
+                currentIndex++;
+                renderCard();
+                updateProgress();
+                updateButtonStates();
+            }
+        }
+
+        // Shuffle the deck
+        function shuffleDeck() {
+            const shuffled = [...currentDeck];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            currentDeck = shuffled;
+            currentIndex = 0;
+            renderCard();
+            updateProgress();
+            updateButtonStates();
+        }
+
+        // Reset to original order
+        function resetDeck() {
+            currentDeck = [...originalDeck];
+            currentIndex = 0;
+            renderCard();
+            updateProgress();
+            updateButtonStates();
+        }
+
+        // Event listeners
+        flashcard.addEventListener('click', flipCard);
+        
+        flashcard.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                flipCard();
+            }
+        });
+
+        prevBtn.addEventListener('click', previousCard);
+        nextBtn.addEventListener('click', nextCard);
+        shuffleBtn.addEventListener('click', shuffleDeck);
+        resetBtn.addEventListener('click', resetDeck);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            // Avoid triggering when typing in input fields
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            switch(e.key) {
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    previousCard();
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    nextCard();
+                    break;
+                case ' ':
+                    if (e.target !== flashcard) {
+                        e.preventDefault();
+                        flipCard();
+                    }
+                    break;
+            }
+        });
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>

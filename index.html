@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oracle Database - Meniu Cursuri</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #d4a574 0%, #c9956f 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            padding: 20px;
+        }
+
+        .course-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            background: white;
+        }
+
+        .course-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #d4a574;
+            margin-bottom: 10px;
+        }
+
+        .course-title {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .course-description {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .card-icon {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Oracle Database - Cursuri Interactive</h1>
+        
+        <div class="courses-grid">
+            <a href="oracle-flashcards-curs1/index.html" class="course-card">
+                <div class="card-icon">📚</div>
+                <div class="course-number">1</div>
+                <div class="course-title">Curs 1</div>
+                <div class="course-description">35 flashcards</div>
+            </a>
+
+            <a href="oracle-flashcards-curs2/index.html" class="course-card">
+                <div class="card-icon">💾</div>
+                <div class="course-number">2</div>
+                <div class="course-title">Curs 2</div>
+                <div class="course-description">44 flashcards</div>
+            </a>
+
+            <a href="oracle-flashcards-curs3/index.html" class="course-card">
+                <div class="card-icon">🔍</div>
+                <div class="course-number">3</div>
+                <div class="course-title">Curs 3</div>
+                <div class="course-description">51 flashcards</div>
+            </a>
+
+            <a href="oracle-flashcards-curs4/index.html" class="course-card">
+                <div class="card-icon">⚙️</div>
+                <div class="course-number">4</div>
+                <div class="course-title">Curs 4</div>
+                <div class="course-description">39 flashcards</div>
+            </a>
+
+            <a href="oracle-flashcards-curs5/index.html" class="course-card">
+                <div class="card-icon">🎯</div>
+                <div class="course-number">5</div>
+                <div class="course-title">Curs 5</div>
+                <div class="course-description">39 flashcards </div>
+            </a>
+
+            <a href="oracle-flashcards-curs6/index.html" class="course-card">
+                <div class="card-icon">🏆</div>
+                <div class="course-number">6</div>
+                <div class="course-title">Curs 6</div>
+                <div class="course-description">38 flashcards</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

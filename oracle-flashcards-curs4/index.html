@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oracle Database Course 4 - Fisiere de Date și Tablespace</title>
+    <style>
+        :root {
+            /* Primitive Color Tokens */
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-teal-800: rgba(41, 150, 161, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-red-500: rgba(192, 21, 47, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-orange-500: rgba(168, 75, 47, 1);
+
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+            --color-slate-500-rgb: 98, 108, 113;
+
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-primary-active: var(--color-teal-700);
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+
+            --font-family-base: 'Segoe UI', 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-size-base: 14px;
+            --font-size-lg: 16px;
+            --font-size-xl: 18px;
+            --font-size-2xl: 20px;
+            --font-size-3xl: 24px;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 550;
+            --font-weight-bold: 600;
+
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+
+            --radius-base: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+            --duration-normal: 250ms;
+            --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-gray-400-rgb: 119, 124, 124;
+                --color-teal-300-rgb: 50, 184, 198;
+                --color-gray-300-rgb: 167, 169, 169;
+                --color-gray-200-rgb: 245, 245, 245;
+
+                --color-background: var(--color-charcoal-700);
+                --color-surface: var(--color-charcoal-800);
+                --color-text: var(--color-gray-200);
+                --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+                --color-primary: var(--color-teal-300);
+                --color-primary-hover: var(--color-teal-400);
+                --color-primary-active: var(--color-teal-800);
+                --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-base);
+            background: linear-gradient(135deg, #8E44AD 0%, #9B59B6 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-20);
+            color: var(--color-white);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            animation: fadeIn 0.6s var(--ease-standard);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: var(--space-32);
+        }
+
+        h1 {
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-12);
+            color: var(--color-white);
+        }
+
+        .progress {
+            font-size: var(--font-size-lg);
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .card-container {
+            perspective: 1000px;
+            margin-bottom: var(--space-32);
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s var(--ease-standard);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius-xl);
+            padding: var(--space-32);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+            transition: box-shadow 0.3s var(--ease-standard);
+        }
+
+        .card:hover .card-face {
+            box-shadow: 0 25px 35px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #8E44AD 0%, #9B59B6 100%);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #6C3483 0%, #5B2C6F 100%);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            transform: rotateY(180deg);
+        }
+
+        .card-label {
+            font-size: var(--font-size-base);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: var(--space-16);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .card-content {
+            font-size: var(--font-size-xl);
+            line-height: 1.6;
+            color: var(--color-white);
+            overflow-y: auto;
+            max-height: 320px;
+            padding: var(--space-8);
+        }
+
+        .card-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .card-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .card-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        .card-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .controls {
+            display: flex;
+            gap: var(--space-12);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: var(--space-16);
+        }
+
+        .btn {
+            padding: var(--space-12) var(--space-24);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-semibold);
+            border: none;
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            transition: all 0.2s var(--ease-standard);
+            user-select: none;
+            font-family: var(--font-family-base);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid rgba(255, 255, 255, 0.5);
+            outline-offset: 2px;
+        }
+
+        .btn-primary {
+            background: rgba(255, 255, 255, 0.95);
+            color: #8E44AD;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-white);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--color-white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn:disabled:hover {
+            transform: none;
+            box-shadow: var(--shadow-md);
+        }
+
+        .hint {
+            text-align: center;
+            font-size: var(--font-size-base);
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: var(--space-16);
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: var(--space-16);
+            }
+
+            h1 {
+                font-size: var(--font-size-2xl);
+            }
+
+            .card {
+                height: 350px;
+            }
+
+            .card-face {
+                padding: var(--space-24);
+            }
+
+            .card-content {
+                font-size: var(--font-size-lg);
+                max-height: 270px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: rotateY(180deg) scale(1);
+            }
+            50% {
+                transform: rotateY(180deg) scale(1.05);
+            }
+        }
+
+        .card.flipped .card-back {
+            animation: bounce 0.3s var(--ease-standard) 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Oracle Database Course 4 - Fisiere de Date și Tablespace</h1>
+            <div class="progress" id="progress">Card 1 / 39</div>
+        </header>
+
+        <div class="card-container">
+            <div class="card" id="flashcard" role="button" tabindex="0" aria-label="Flashcard - Click to flip">
+                <div class="card-face card-front">
+                    <div class="card-label">Întrebare</div>
+                    <div class="card-content" id="question"></div>
+                </div>
+                <div class="card-face card-back">
+                    <div class="card-label">Răspuns</div>
+                    <div class="card-content" id="answer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="prevBtn" aria-label="Previous card">
+                ← Previous
+            </button>
+            <button class="btn btn-primary" id="nextBtn" aria-label="Next card">
+                Next →
+            </button>
+            <button class="btn btn-secondary" id="shuffleBtn" aria-label="Shuffle cards">
+                🔀 Shuffle
+            </button>
+            <button class="btn btn-secondary" id="resetBtn" aria-label="Reset to original order">
+                ↺ Reset
+            </button>
+        </div>
+
+        <div class="hint">
+            💡 Click the card or press Space to flip | Use Arrow keys to navigate
+        </div>
+    </div>
+
+    <script>
+        // Flashcard data for Course 4: Fisiere de Date și Tablespace
+        const flashcardsData = [
+            { id: 1, question: "Ce este un tablespace în Oracle?", answer: "Un container logic pentru stocarea datelor (tabele, indecși) asociat cu unul sau mai multe fișiere fizice de date. Permite administrarea eficientă și backup parțial." },
+            { id: 2, question: "Cum este structurată o bază de date Oracle?", answer: "Structural fizic: fișiere de control, date și Redo Log. Structural logic: Tablespace → Segment → Extent → Bloc." },
+            { id: 3, question: "Ce sunt segmentele în Oracle?", answer: "Obiecte care conțin o structură logică (tabel, index). Sunt 4 tipuri generice: date, index, temporar, rollback. 11 tipuri efective: table, index, cluster, rollback, lobsegment, etc." },
+            { id: 4, question: "Ce este o extensie (extent)?", answer: "O succesiune contigă de blocuri de date logice. Se găsește întreg într-un singur fișier de date. Contiguitatea este importantă pentru viteză de acces." },
+            { id: 5, question: "Ce este un bloc (block) în Oracle?", answer: "Cea mai mică unitate de I/O pentru SGBD, cu dimensiune DB_BLOCK_SIZE. Poate fi format din mai multe blocuri fizice de disc." },
+            { id: 6, question: "Ce sunt segmentele temporare și când sunt utilizate?", answer: "Segmente pentru operații de sortare. Utilizate de: CREATE INDEX, SELECT...ORDER BY, SELECT DISTINCT, SELECT...GROUP BY, SELECT...UNION, etc. Eliberate de SMON după folosire." },
+            { id: 7, question: "Ce avantaje oferă folosirea mai multor tablespace-uri?", answer: "Separare date user de sistem, isolarea aplicațiilor, stocarea pe discuri diferite, optimizare performanță, backup selectiv, control acces la spațiu." },
+            { id: 8, question: "Ce este tablespace-ul SYSTEM?", answer: "Creat automat la crearea BD, conține dicționarul de date și segmentul de rollback de sistem. Nu poate fi redenumit, șters, trecut offline." },
+            { id: 9, question: "Ce este tablespace-ul SYSAUX?", answer: "Creat automat la crearea BD, conține informații despre schemele folosite de uneltele Oracle. Nu poate fi redenumit, șters sau trecut offline." },
+            { id: 10, question: "Ce tipuri de tablespace-uri există?", answer: "Permanent (uzuale, inclusiv sistem), Temporary (segmente temporare), Undo (Oracle 9i+, conține segmente de undo/rollback)." },
+            { id: 11, question: "Ce este DMT și LMT?", answer: "DMT (Dictionary Managed): gestiune prin dicționar. LMT (Locally Managed): gestiune locală prin bitmap în header fișier. LMT este mai eficient." },
+            { id: 12, question: "Ce este AUTOALLOCATE în gestiunea extensiilor?", answer: "Opțiune LMT care permite extensii de dimensiuni diferite, gestionate automat de sistem. Dimensiune minimă 64K (1M pentru blocuri 16K+)." },
+            { id: 13, question: "Ce este UNIFORM în gestiunea extensiilor?", answer: "Opțiune LMT cu extensii de dimensiune fixă. Fiecare extensie trebuie minim 5 blocuri. Permite alocare precisă, minimizând fragmentarea." },
+            { id: 14, question: "Ce parametri controlează dimensionarea extensiilor în DEFAULT STORAGE?", answer: "INITIAL, NEXT, PCTINCREASE, MINEXTENTS, MAXEXTENTS. Formula dimensiune: Size(n) = NEXT × (1 + PCTINCREASE/100)^(n-2)." },
+            { id: 15, question: "Ce face clauza EXTENT MANAGEMENT DICTIONARY?", answer: "Creează un tablespace DMT (Dictionary Managed) unde gestiunea extensiilor se face prin dicționarul de date." },
+            { id: 16, question: "Ce face clauza EXTENT MANAGEMENT LOCAL?", answer: "Creează un tablespace LMT (Locally Managed) cu gestiune locală, AUTOALLOCATE (implicit) sau UNIFORM." },
+            { id: 17, question: "Ce sunt FREELISTS și FREELIST GROUPS?", answer: "Liste de blocuri cu spațiu disponibil pentru INSERT. FREELISTS pentru gestionare secvențială. FREELIST GROUPS pentru aplicații paralele (un grup per nod)." },
+            { id: 18, question: "Ce este SEGMENT SPACE MANAGEMENT AUTO vs MANUAL?", answer: "MANUAL: liste de spațiu liber (FREELISTS). AUTO: bitmapuri pentru gestionare automată. AUTO mai ușor de administrat dar potențial mai lent la update-uri masive." },
+            { id: 19, question: "Ce face AUTOEXTEND în CREATE TABLESPACE?", answer: "Permite extinderea automată a fisierelor de date. NEXT specifică incrementul. MAXSIZE specifică limita (UNLIMITED = fără limită)." },
+            { id: 20, question: "Cum se adaugă un nou fișier de date la tablespace?", answer: "ALTER TABLESPACE user ADD DATAFILE '/path/file.dbf' SIZE 50M; Se pot adăuga mai multe în aceeași comandă." },
+            { id: 21, question: "Cum se redimensionează manual un fișier de date?", answer: "ALTER DATABASE dbname DATAFILE '/path/file.dbf' RESIZE 500M; Pentru micșorare, doar spațiu liber de la final." },
+            { id: 22, question: "Ce are loc la ONLINE tablespace?", answer: "Tablespace-ul devine disponibil. Se folosește pentru a aduce online un tablespace care era offline." },
+            { id: 23, question: "Ce moduri există pentru OFFLINE tablespace?", answer: "NORMAL (checkpoint, fără recovery la ONLINE), TEMPORARY (checkpoint parțial, posibil recovery), IMMEDIATE (fără checkpoint, necesită recovery)." },
+            { id: 24, question: "Ce condiții trebuie îndeplinite pentru READ ONLY?", answer: "Tablespace online, fără tranzacții active, fără segmente de rollback active, fără online backup, COMPATIBLE >= 7.1.0." },
+            { id: 25, question: "Ce diferență este între ALTER TABLESPACE și ALTER DATABASE pentru rename?", answer: "ALTER TABLESPACE RENAME: tablespace online. ALTER DATABASE RENAME: BD montată dar nu deschisă, apoi recovery și deschidere." },
+            { id: 26, question: "Ce face DROP TABLESPACE?", answer: "Șterge tablespace-ul. INCLUDING CONTENTS șterge și datele. CASCADE CONSTRAINTS șterge și constrângerile referențiale." },
+            { id: 27, question: "Ce informații oferă vederea DBA_TABLESPACES?", answer: "Nume, conținut (permanent/temporary/undo), status (online/offline), extent management, segment space management, parametrii de stocare." },
+            { id: 28, question: "Ce informații oferă vederea DBA_DATA_FILES?", answer: "Date despre fișierele de date: nume, dimensiune, status, tablespace, numărul blocurilor, locație, etc." },
+            { id: 29, question: "Ce vederi sunt disponibile pentru informații despre extents?", answer: "DBA_EXTENTS (extents existente), DBA_SEGMENTS (segmente), DBA_FREE_SPACE (spațiu liber), V$SEGMENT_STATISTICS." },
+            { id: 30, question: "Ce vederi sunt disponibile pentru Undo și Rollback?", answer: "DBA_ROLLBACK_SEGS, DBA_UNDO_EXTENTS, V$ROLLSTAT, V$UNDOSTAT pentru monitorizare și diagnosticare." },
+            { id: 31, question: "Ce este LOGGING vs NOLOGGING în CREATE TABLESPACE?", answer: "LOGGING (implicit): modificări înregistrate în Redo Log. NOLOGGING: operații (CREATE INDEX) nu se înregistrează. Nu e recomandat NOLOGGING." },
+            { id: 32, question: "Ce face FORCE LOGGING în CREATE TABLESPACE?", answer: "Forțează înregistrarea în Redo Log a modificărilor pe obiecte, chiar dacă create cu NOLOGGING." },
+            { id: 33, question: "Ce face BLOCKSIZE în CREATE TABLESPACE?", answer: "Specifică dimensiune non-standard a blocului (2K/4K/8K/16K/32K) pentru acel tablespace. Legat de alți parametri." },
+            { id: 34, question: "Ce face FLASHBACK ON/OFF în CREATE TABLESPACE?", answer: "Permite/interzice operații de tip FLASHBACK DATABASE TO pentru a readuce BD la stare anterioară." },
+            { id: 35, question: "Ce este MINIMUM EXTENT?", answer: "Specifică dimensiunea minimă a unei extensii. Orice extensie este de acea dimensiune sau multiplu. Previne fragmentarea." },
+            { id: 36, question: "Ce este CACHE vs NOCACHE?", answer: "CACHE: datele din tablespace sunt păstrate în Buffer Cache. NOCACHE: nu se păstrează. NOCACHE este implicit." },
+            { id: 37, question: "Cum se determină tipul tablespace la CREATE dacă nu e specificat EXTENT MANAGEMENT?", answer: "Dacă COMPATIBLE < 9.0.0: DMT. Dacă >= 9.0.0 și DEFAULT STORAGE NU e specificat: LMT AUTOALLOCATE (implicit)." },
+            { id: 38, question: "Cum se mută fișierele de date ale unui tablespace?", answer: "1. OFFLINE tablespace. 2. Copiere fișiere cu comenzi OS. 3. ALTER TABLESPACE RENAME. 4. ONLINE." },
+            { id: 39, question: "Ce diferență este între fișier de date și extent în sistem de fișiere?", answer: "File system extents: blocuri fizice contiguo pe disc (gestionat de OS). Oracle extents: structuri logice genționate de BD pe file system extents." }
+        ];
+
+        // State management (in-memory)
+        let currentIndex = 0;
+        let isFlipped = false;
+        let currentDeck = [...flashcardsData];
+        let originalDeck = [...flashcardsData];
+
+        // DOM elements
+        const flashcard = document.getElementById('flashcard');
+        const questionEl = document.getElementById('question');
+        const answerEl = document.getElementById('answer');
+        const progressEl = document.getElementById('progress');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // Initialize the app
+        function init() {
+            renderCard();
+            updateProgress();
+            updateButtonStates();
+        }
+
+        // Render current card
+        function renderCard() {
+            const card = currentDeck[currentIndex];
+            questionEl.textContent = card.question;
+            answerEl.textContent = card.answer;
+            
+            // Reset flip state when changing cards
+            if (isFlipped) {
+                flipCard();
+            }
+        }
+
+        // Flip the card
+        function flipCard() {
+            isFlipped = !isFlipped;
+            flashcard.classList.toggle('flipped');
+        }
+
+        // Update progress indicator
+        function updateProgress() {
+            progressEl.textContent = `Card ${currentIndex + 1} / ${currentDeck.length}`;
+        }
+
+        // Update button states
+        function updateButtonStates() {
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === currentDeck.length - 1;
+        }
+
+        // Navigate to previous card
+        function previousCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderCard();
+                updateProgress();
+                updateButtonStates();
+            }
+        }
+
+        // Navigate to next card
+        function nextCard() {
+            if (currentIndex < currentDeck.length - 1) {
+                currentIndex++;
+                renderCard();
+                updateProgress();
+                updateButtonStates();
+            }
+        }
+
+        // Shuffle the deck
+        function shuffleDeck() {
+            const shuffled = [...currentDeck];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            currentDeck = shuffled;
+            currentIndex = 0;
+            renderCard();
+            updateProgress();
+            updateButtonStates();
+        }
+
+        // Reset to original order
+        function resetDeck() {
+            currentDeck = [...originalDeck];
+            currentIndex = 0;
+            renderCard();
+            updateProgress();
+            updateButtonStates();
+        }
+
+        // Event listeners
+        flashcard.addEventListener('click', flipCard);
+        
+        flashcard.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                flipCard();
+            }
+        });
+
+        prevBtn.addEventListener('click', previousCard);
+        nextBtn.addEventListener('click', nextCard);
+        shuffleBtn.addEventListener('click', shuffleDeck);
+        resetBtn.addEventListener('click', resetDeck);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            // Avoid triggering when typing in input fields
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            switch(e.key) {
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    previousCard();
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    nextCard();
+                    break;
+                case ' ':
+                    if (e.target !== flashcard) {
+                        e.preventDefault();
+                        flipCard();
+                    }
+                    break;
+            }
+        });
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>
