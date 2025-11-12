@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oracle Database Administrator Quiz - 100 Questions</title>
+    <style>
+        :root {
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-red-500: rgba(192, 21, 47, 1);
+            --color-green-500: rgba(34, 197, 94, 1);
+            --color-green-600: rgba(22, 163, 74, 1);
+
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+
+            --font-family-base: 'Segoe UI', 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-size-sm: 12px;
+            --font-size-base: 14px;
+            --font-size-lg: 16px;
+            --font-size-xl: 18px;
+            --font-size-2xl: 20px;
+            --font-size-3xl: 24px;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 550;
+            --font-weight-bold: 600;
+
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+
+            --radius-base: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+            --duration-fast: 150ms;
+            --duration-normal: 250ms;
+            --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-gray-400-rgb: 119, 124, 124;
+                --color-gray-200-rgb: 245, 245, 245;
+
+                --color-background: var(--color-charcoal-700);
+                --color-surface: var(--color-charcoal-800);
+                --color-text: var(--color-gray-200);
+                --color-text-secondary: var(--color-gray-300);
+                --color-primary: var(--color-teal-300);
+                --color-primary-hover: var(--color-teal-400);
+                --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-base);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--space-24);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: var(--space-32);
+            padding: var(--space-24);
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        h1 {
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+            margin-bottom: var(--space-12);
+        }
+
+        .subtitle {
+            font-size: var(--font-size-lg);
+            color: var(--color-text-secondary);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .progress-container {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-20);
+            margin-bottom: var(--space-24);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-12);
+            flex-wrap: wrap;
+            gap: var(--space-12);
+        }
+
+        .progress-text {
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text);
+        }
+
+        .score {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background-color: rgba(var(--color-teal-500-rgb), 0.15);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-teal-500), var(--color-teal-400));
+            transition: width 0.4s var(--ease-standard);
+            border-radius: 6px;
+        }
+
+        .course-badge {
+            display: inline-block;
+            padding: var(--space-8) var(--space-16);
+            background: rgba(var(--color-teal-500-rgb), 0.12);
+            color: var(--color-primary);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--space-16);
+        }
+
+        .question-card {
+            background: var(--color-surface);
+            border-radius: var(--radius-xl);
+            padding: var(--space-32);
+            margin-bottom: var(--space-24);
+            box-shadow: var(--shadow-md);
+        }
+
+        .question-text {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text);
+            margin-bottom: var(--space-24);
+            line-height: 1.5;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-12);
+        }
+
+        .answer-btn {
+            width: 100%;
+            padding: var(--space-16) var(--space-20);
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-base);
+            font-family: var(--font-family-base);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-text);
+            cursor: pointer;
+            transition: all var(--duration-normal) var(--ease-standard);
+            text-align: left;
+        }
+
+        .answer-btn:hover:not(:disabled) {
+            border-color: var(--color-primary);
+            background: rgba(var(--color-teal-500-rgb), 0.05);
+            transform: translateX(4px);
+        }
+
+        .answer-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .answer-btn.correct {
+            background: var(--color-green-500);
+            border-color: var(--color-green-600);
+            color: white;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .answer-btn.incorrect {
+            background: var(--color-red-500);
+            border-color: var(--color-red-500);
+            color: white;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .controls {
+            display: flex;
+            gap: var(--space-12);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: var(--space-12) var(--space-24);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-semibold);
+            font-family: var(--font-family-base);
+            border: none;
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            transition: all var(--duration-normal) var(--ease-standard);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--color-primary-hover);
+        }
+
+        .btn-secondary {
+            background: rgba(var(--color-brown-600-rgb), 0.12);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: rgba(var(--color-brown-600-rgb), 0.2);
+        }
+
+        .results {
+            background: var(--color-surface);
+            border-radius: var(--radius-xl);
+            padding: var(--space-32);
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .results h2 {
+            font-size: var(--font-size-3xl);
+            color: var(--color-primary);
+            margin-bottom: var(--space-24);
+        }
+
+        .final-score {
+            font-size: 48px;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+            margin-bottom: var(--space-16);
+        }
+
+        .percentage {
+            font-size: var(--font-size-2xl);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-24);
+        }
+
+        .rating {
+            display: inline-block;
+            padding: var(--space-12) var(--space-24);
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-32);
+        }
+
+        .rating.excellent {
+            background: var(--color-green-500);
+            color: white;
+        }
+
+        .rating.good {
+            background: var(--color-teal-500);
+            color: white;
+        }
+
+        .rating.fair {
+            background: rgba(var(--color-teal-500-rgb), 0.5);
+            color: white;
+        }
+
+        .rating.poor {
+            background: var(--color-red-500);
+            color: white;
+        }
+
+        .course-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-16);
+            margin-top: var(--space-24);
+        }
+
+        .course-stat {
+            background: rgba(var(--color-teal-500-rgb), 0.08);
+            padding: var(--space-16);
+            border-radius: var(--radius-base);
+            border: 1px solid var(--color-border);
+        }
+
+        .course-stat-title {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-8);
+        }
+
+        .course-stat-value {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+        }
+
+        .start-screen {
+            background: var(--color-surface);
+            border-radius: var(--radius-xl);
+            padding: var(--space-32);
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .start-screen h2 {
+            font-size: var(--font-size-3xl);
+            color: var(--color-text);
+            margin-bottom: var(--space-16);
+        }
+
+        .start-screen p {
+            font-size: var(--font-size-lg);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-32);
+            line-height: 1.6;
+        }
+
+        .start-btn {
+            padding: var(--space-16) var(--space-32);
+            font-size: var(--font-size-xl);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: var(--space-16);
+            }
+
+            h1 {
+                font-size: var(--font-size-2xl);
+            }
+
+            .question-card {
+                padding: var(--space-24);
+            }
+
+            .question-text {
+                font-size: var(--font-size-lg);
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .course-breakdown {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s var(--ease-standard);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Oracle Database Administrator Quiz</h1>
+            <p class="subtitle">100 Questions - 6 Courses</p>
+        </header>
+
+        <!-- Start Screen -->
+        <div id="startScreen" class="start-screen">
+            <h2>Ready to Test Your Knowledge?</h2>
+            <p>This quiz contains 100 multiple choice questions covering all 6 Oracle Database Administration courses. Each question has 4 answer options. Select the best answer and track your progress as you go!</p>
+            <button class="btn btn-primary start-btn" id="startBtn">Start Quiz</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quizScreen" class="hidden">
+            <div class="progress-container">
+                <div class="progress-info">
+                    <span class="progress-text" id="progressText">Question 1 / 100</span>
+                    <span class="score" id="scoreDisplay">Score: 0 / 0 (0%)</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 1%"></div>
+                </div>
+            </div>
+
+            <div class="question-card fade-in" id="questionCard">
+                <span class="course-badge" id="courseBadge">Curs 1</span>
+                <h2 class="question-text" id="questionText"></h2>
+                <div class="answers" id="answersContainer"></div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-primary" id="nextBtn" disabled>Next Question →</button>
+                <button class="btn btn-secondary" id="shuffleBtn">Shuffle Remaining</button>
+                <button class="btn btn-secondary" id="restartBtn">Restart Quiz</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="hidden">
+            <div class="results fade-in">
+                <h2>Quiz Complete!</h2>
+                <div class="final-score" id="finalScore">0 / 100</div>
+                <div class="percentage" id="finalPercentage">0%</div>
+                <div class="rating" id="rating">Good</div>
+                
+                <div class="course-breakdown" id="courseBreakdown"></div>
+                
+                <div class="controls" style="margin-top: var(--space-32);">
+                    <button class="btn btn-primary" id="restartFromResultsBtn">Restart Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -3,398 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oracle Database Administration - Flashcards</title>
+    <title>Oracle Database Course 1 - Introducere în Administrarea BD</title>
     <style>
-        :root {
-            /* Primitive Color Tokens */
-            --color-white: rgba(255, 255, 255, 1);
-            --color-black: rgba(0, 0, 0, 1);
-            --color-cream-50: rgba(252, 252, 249, 1);
-            --color-cream-100: rgba(255, 255, 253, 1);
-            --color-gray-200: rgba(245, 245, 245, 1);
-            --color-gray-300: rgba(167, 169, 169, 1);
-            --color-gray-400: rgba(119, 124, 124, 1);
-            --color-slate-500: rgba(98, 108, 113, 1);
-            --color-brown-600: rgba(94, 82, 64, 1);
-            --color-charcoal-700: rgba(31, 33, 33, 1);
-            --color-charcoal-800: rgba(38, 40, 40, 1);
-            --color-slate-900: rgba(19, 52, 59, 1);
-            --color-teal-300: rgba(50, 184, 198, 1);
-            --color-teal-400: rgba(45, 166, 178, 1);
-            --color-teal-500: rgba(33, 128, 141, 1);
-            --color-teal-600: rgba(29, 116, 128, 1);
-            --color-teal-700: rgba(26, 104, 115, 1);
-            --color-teal-800: rgba(41, 150, 161, 1);
-            --color-red-400: rgba(255, 84, 89, 1);
-            --color-red-500: rgba(192, 21, 47, 1);
-            --color-orange-400: rgba(230, 129, 97, 1);
-            --color-orange-500: rgba(168, 75, 47, 1);
-
-            --color-brown-600-rgb: 94, 82, 64;
-            --color-teal-500-rgb: 33, 128, 141;
-            --color-slate-900-rgb: 19, 52, 59;
-            --color-slate-500-rgb: 98, 108, 113;
-
-            --color-background: var(--color-cream-50);
-            --color-surface: var(--color-cream-100);
-            --color-text: var(--color-slate-900);
-            --color-text-secondary: var(--color-slate-500);
-            --color-primary: var(--color-teal-500);
-            --color-primary-hover: var(--color-teal-600);
-            --color-primary-active: var(--color-teal-700);
-            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
-
-            --font-family-base: 'Segoe UI', 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-size-base: 14px;
-            --font-size-lg: 16px;
-            --font-size-xl: 18px;
-            --font-size-2xl: 20px;
-            --font-size-3xl: 24px;
-            --font-weight-medium: 500;
-            --font-weight-semibold: 550;
-            --font-weight-bold: 600;
-
-            --space-8: 8px;
-            --space-12: 12px;
-            --space-16: 16px;
-            --space-20: 20px;
-            --space-24: 24px;
-            --space-32: 32px;
-
-            --radius-base: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
-
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-
-            --duration-normal: 250ms;
-            --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --color-gray-400-rgb: 119, 124, 124;
-                --color-teal-300-rgb: 50, 184, 198;
-                --color-gray-300-rgb: 167, 169, 169;
-                --color-gray-200-rgb: 245, 245, 245;
-
-                --color-background: var(--color-charcoal-700);
-                --color-surface: var(--color-charcoal-800);
-                --color-text: var(--color-gray-200);
-                --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
-                --color-primary: var(--color-teal-300);
-                --color-primary-hover: var(--color-teal-400);
-                --color-primary-active: var(--color-teal-800);
-                --color-border: rgba(var(--color-gray-400-rgb), 0.3);
-            }
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: var(--font-family-base);
-            background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            padding: var(--space-20);
-            color: var(--color-white);
-            -webkit-font-smoothing: antialiased;
+            align-items: center;
+            padding: 20px;
         }
 
-        .container {
-            width: 100%;
-            max-width: 900px;
-            animation: fadeIn 0.6s var(--ease-standard);
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: var(--space-32);
-        }
+        .container { max-width: 800px; width: 100%; }
 
         h1 {
-            font-size: var(--font-size-3xl);
-            font-weight: var(--font-weight-bold);
-            margin-bottom: var(--space-12);
-            color: var(--color-white);
+            text-align: center; color: white; margin-bottom: 10px; font-size: 1.8em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        .progress {
-            font-size: var(--font-size-lg);
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: var(--font-weight-medium);
-        }
+        .card-counter { text-align: center; color: rgba(255,255,255,0.9); margin-bottom: 30px; font-size: 1.1em; }
 
-        .card-container {
-            perspective: 1000px;
-            margin-bottom: var(--space-32);
+        .flashcard {
+            background: rgba(130, 150, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 60px 40px;
             min-height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .card {
-            width: 100%;
-            max-width: 600px;
-            height: 400px;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s var(--ease-standard);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             cursor: pointer;
-            user-select: none;
+            position: relative;
+            perspective: 1200px; /* perspectiva pentru copiii care se rotesc */
         }
 
-        .card.flipped {
-            transform: rotateY(180deg);
+        /* Eliminăm rotirea containerului; rotim fețele individual */
+        .card-content {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 60px 40px; text-align: center;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+            backface-visibility: hidden; -webkit-backface-visibility: hidden;
         }
 
-        .card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: var(--radius-xl);
-            padding: var(--space-32);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            box-shadow: var(--shadow-xl);
-            transition: box-shadow 0.3s var(--ease-standard);
-        }
+        /* Stări implicite: fața la 0°, spatele la 180° */
+        .card-front { transform: rotateY(0deg); }
+        .card-back  { transform: rotateY(180deg); }
 
-        .card:hover .card-face {
-            box-shadow: 0 25px 35px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08);
-        }
-
-        .card-front {
-            background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .card-back {
-            background: linear-gradient(135deg, #34495E 0%, #445566 100%);
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            transform: rotateY(180deg);
-        }
+        /* Când cardul e întors, inversăm transformările fețelor */
+        .flashcard.flipped .card-front { transform: rotateY(180deg); }
+        .flashcard.flipped .card-back  { transform: rotateY(0deg); }
 
         .card-label {
-            font-size: var(--font-size-base);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: var(--space-16);
-            font-weight: var(--font-weight-semibold);
+            font-size: 0.9em; color: #e0e7ff; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 1px; margin-bottom: 20px;
         }
 
-        .card-content {
-            font-size: var(--font-size-xl);
-            line-height: 1.6;
-            color: var(--color-white);
-            overflow-y: auto;
-            max-height: 320px;
-            padding: var(--space-8);
-        }
-
-        .card-content::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .card-content::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }
-
-        .card-content::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
-        }
-
-        .card-content::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
+        .card-text { font-size: 1.3em; line-height: 1.6; color: #ffffff; }
 
         .controls {
-            display: flex;
-            gap: var(--space-12);
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: var(--space-16);
+            display: flex; justify-content: center; gap: 15px; margin-top: 30px; flex-wrap: wrap;
         }
 
-        .btn {
-            padding: var(--space-12) var(--space-24);
-            font-size: var(--font-size-base);
-            font-weight: var(--font-weight-semibold);
-            border: none;
-            border-radius: var(--radius-base);
-            cursor: pointer;
-            transition: all 0.2s var(--ease-standard);
-            user-select: none;
-            font-family: var(--font-family-base);
-            box-shadow: var(--shadow-md);
+        button {
+            padding: 12px 30px; font-size: 1em; border: none; border-radius: 8px; cursor: pointer;
+            transition: all 0.3s ease; font-weight: 600; color: white;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
+        .btn-primary  { background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3); }
+        .btn-primary:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
 
-        .btn:active {
-            transform: translateY(0);
-        }
+        .btn-secondary { background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.2); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.25); }
 
-        .btn:focus-visible {
-            outline: 2px solid rgba(255, 255, 255, 0.5);
-            outline-offset: 2px;
-        }
+        .hint { text-align: center; color: rgba(255,255,255,0.7); margin-top: 20px; font-size: 0.9em; }
 
-        .btn-primary {
-            background: rgba(255, 255, 255, 0.95);
-            color: #2C3E50;
-        }
-
-        .btn-primary:hover {
-            background: var(--color-white);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.15);
-            color: var(--color-white);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        .btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn:disabled:hover {
-            transform: none;
-            box-shadow: var(--shadow-md);
-        }
-
-        .hint {
-            text-align: center;
-            font-size: var(--font-size-base);
-            color: rgba(255, 255, 255, 0.6);
-            margin-top: var(--space-16);
-        }
-
-        @media (max-width: 640px) {
-            body {
-                padding: var(--space-16);
-            }
-
-            h1 {
-                font-size: var(--font-size-2xl);
-            }
-
-            .card {
-                height: 350px;
-            }
-
-            .card-face {
-                padding: var(--space-24);
-            }
-
-            .card-content {
-                font-size: var(--font-size-lg);
-                max-height: 270px;
-            }
-
-            .controls {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: rotateY(180deg) scale(1);
-            }
-            50% {
-                transform: rotateY(180deg) scale(1.05);
-            }
-        }
-
-        .card.flipped .card-back {
-            animation: bounce 0.3s var(--ease-standard) 0.3s;
+        @media (max-width: 768px) {
+            .flashcard { padding: 40px 20px; min-height: 350px; }
+            .card-content { padding: 40px 20px; }
+            .card-text { font-size: 1.1em; }
+            h1 { font-size: 1.4em; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Oracle Database Administration - Flashcards</h1>
-            <div class="progress" id="progress">Card 1 / 35</div>
-        </header>
+        <h1>Oracle Database Curs 1 - Introducere în Administrarea BD</h1>
+        <div class="card-counter">Card <span id="current-card">1</span> / <span id="total-cards">35</span></div>
 
-        <div class="card-container">
-            <div class="card" id="flashcard" role="button" tabindex="0" aria-label="Flashcard - Click to flip">
-                <div class="card-face card-front">
-                    <div class="card-label">Întrebare</div>
-                    <div class="card-content" id="question"></div>
-                </div>
-                <div class="card-face card-back">
-                    <div class="card-label">Răspuns</div>
-                    <div class="card-content" id="answer"></div>
-                </div>
+        <div class="flashcard" id="flashcard" onclick="flipCard()">
+            <div class="card-content card-front">
+                <div class="card-label">ÎNTREBARE</div>
+                <div class="card-text" id="question-text"></div>
+            </div>
+            <div class="card-content card-back">
+                <div class="card-label">RĂSPUNS</div>
+                <div class="card-text" id="answer-text"></div>
             </div>
         </div>
 
         <div class="controls">
-            <button class="btn btn-primary" id="prevBtn" aria-label="Previous card">
-                ← Previous
-            </button>
-            <button class="btn btn-primary" id="nextBtn" aria-label="Next card">
-                Next →
-            </button>
-            <button class="btn btn-secondary" id="shuffleBtn" aria-label="Shuffle cards">
-                🔀 Shuffle
-            </button>
-            <button class="btn btn-secondary" id="resetBtn" aria-label="Reset to original order">
-                ↺ Reset
-            </button>
+            <button class="btn-primary" onclick="previousCard()">← Previous</button>
+            <button class="btn-primary" onclick="nextCard()">Next →</button>
+            <button class="btn-secondary" onclick="shuffleCards()">🔀 Shuffle</button>
+            <button class="btn-secondary" onclick="resetCards()">🔄 Reset</button>
         </div>
 
-        <div class="hint">
-            💡 Click the card or press Space to flip | Use Arrow keys to navigate
-        </div>
+        <div class="hint">💡 Click the card or press Space to flip | Use Arrow keys to navigate</div>
     </div>
 
     <script>
-        // Flashcard data
         const flashcardsData = [
             { id: 1, question: "Ce este DBA (Database Administration)?", answer: "Funcția de gestionare, întreținere și securizare a bazelor de date pentru a asigura disponibilitatea, performanța și integritatea acestora prin modelarea datelor, monitorizarea performanței, securitate, copii de rezervă și optimizare." },
             { id: 2, question: "Care sunt principalele sarcini ale unui administrator DBA?", answer: "Instalarea și actualizarea serverului, alocarea spațiului de stocare, modificarea structurii BD, înscrierea utilizatorilor, menținerea securității, monitorizarea performanței, backup și restore, contactarea furnizorului pentru suport." },
@@ -433,143 +153,65 @@
             { id: 35, question: "Care sunt cele trei arhitecturi de lucru cu Oracle Server?", answer: "1. Client pe aceeași mașină cu serverul (ex: SQL*Plus). 2. Clientul rulează pe altă mașină (two-tiered). 3. Aplicația user accesează altă aplicație care comunică cu serverul (three-tiered)." }
         ];
 
-        // State management (in-memory)
+        let flashcards = [...flashcardsData];
         let currentIndex = 0;
         let isFlipped = false;
-        let currentDeck = [...flashcardsData];
-        let originalDeck = [...flashcardsData];
 
-        // DOM elements
-        const flashcard = document.getElementById('flashcard');
-        const questionEl = document.getElementById('question');
-        const answerEl = document.getElementById('answer');
-        const progressEl = document.getElementById('progress');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const shuffleBtn = document.getElementById('shuffleBtn');
-        const resetBtn = document.getElementById('resetBtn');
+        function loadCard() {
+            const card = flashcards[currentIndex];
+            document.getElementById('question-text').textContent = card.question;
+            document.getElementById('answer-text').textContent = card.answer;
+            document.getElementById('current-card').textContent = currentIndex + 1;
+            document.getElementById('total-cards').textContent = flashcards.length;
 
-        // Initialize the app
-        function init() {
-            renderCard();
-            updateProgress();
-            updateButtonStates();
-        }
-
-        // Render current card
-        function renderCard() {
-            const card = currentDeck[currentIndex];
-            questionEl.textContent = card.question;
-            answerEl.textContent = card.answer;
-            
-            // Reset flip state when changing cards
             if (isFlipped) {
-                flipCard();
+                document.getElementById('flashcard').classList.remove('flipped');
+                isFlipped = false;
             }
         }
 
-        // Flip the card
         function flipCard() {
+            const cardEl = document.getElementById('flashcard');
+            cardEl.classList.toggle('flipped');
             isFlipped = !isFlipped;
-            flashcard.classList.toggle('flipped');
         }
 
-        // Update progress indicator
-        function updateProgress() {
-            progressEl.textContent = `Card ${currentIndex + 1} / ${currentDeck.length}`;
+        function nextCard() {
+            if (currentIndex < flashcards.length - 1) {
+                currentIndex++;
+                loadCard();
+            }
         }
 
-        // Update button states
-        function updateButtonStates() {
-            prevBtn.disabled = currentIndex === 0;
-            nextBtn.disabled = currentIndex === currentDeck.length - 1;
-        }
-
-        // Navigate to previous card
         function previousCard() {
             if (currentIndex > 0) {
                 currentIndex--;
-                renderCard();
-                updateProgress();
-                updateButtonStates();
+                loadCard();
             }
         }
 
-        // Navigate to next card
-        function nextCard() {
-            if (currentIndex < currentDeck.length - 1) {
-                currentIndex++;
-                renderCard();
-                updateProgress();
-                updateButtonStates();
-            }
-        }
-
-        // Shuffle the deck
-        function shuffleDeck() {
-            const shuffled = [...currentDeck];
-            for (let i = shuffled.length - 1; i > 0; i--) {
+        function shuffleCards() {
+            for (let i = flashcards.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
             }
-            currentDeck = shuffled;
             currentIndex = 0;
-            renderCard();
-            updateProgress();
-            updateButtonStates();
+            loadCard();
         }
 
-        // Reset to original order
-        function resetDeck() {
-            currentDeck = [...originalDeck];
+        function resetCards() {
+            flashcards = [...flashcardsData];
             currentIndex = 0;
-            renderCard();
-            updateProgress();
-            updateButtonStates();
+            loadCard();
         }
 
-        // Event listeners
-        flashcard.addEventListener('click', flipCard);
-        
-        flashcard.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                flipCard();
-            }
-        });
-
-        prevBtn.addEventListener('click', previousCard);
-        nextBtn.addEventListener('click', nextCard);
-        shuffleBtn.addEventListener('click', shuffleDeck);
-        resetBtn.addEventListener('click', resetDeck);
-
-        // Keyboard navigation
         document.addEventListener('keydown', (e) => {
-            // Avoid triggering when typing in input fields
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-                return;
-            }
-
-            switch(e.key) {
-                case 'ArrowLeft':
-                    e.preventDefault();
-                    previousCard();
-                    break;
-                case 'ArrowRight':
-                    e.preventDefault();
-                    nextCard();
-                    break;
-                case ' ':
-                    if (e.target !== flashcard) {
-                        e.preventDefault();
-                        flipCard();
-                    }
-                    break;
-            }
+            if (e.key === 'ArrowRight') nextCard();
+            if (e.key === 'ArrowLeft') previousCard();
+            if (e.key === ' ') { e.preventDefault(); flipCard(); }
         });
 
-        // Initialize on load
-        init();
+        loadCard();
     </script>
 </body>
 </html>
