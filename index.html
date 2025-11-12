@@ -85,6 +85,38 @@
             margin-bottom: 15px;
         }
 
+        /* Secțiunea butonului suplimentar */
+        .extra-actions {
+            text-align: center;
+            margin: 10px 20px 0 20px;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            margin-top: 10px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #2c2c2c;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+            border: 2px solid rgba(0, 0, 0, 0.06);
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            background: #ffffff;
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.24);
+        }
+
+        .cta-emoji {
+            font-size: 1.2em;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 1.8em;
@@ -92,6 +124,11 @@
             
             .courses-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .cta-button {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -133,7 +170,7 @@
                 <div class="card-icon">🎯</div>
                 <div class="course-number">5</div>
                 <div class="course-title">Curs 5</div>
-                <div class="course-description">39 flashcards </div>
+                <div class="course-description">39 flashcards</div>
             </a>
 
             <a href="oracle-flashcards-curs6/index.html" class="course-card">
@@ -141,6 +178,14 @@
                 <div class="course-number">6</div>
                 <div class="course-title">Curs 6</div>
                 <div class="course-description">38 flashcards</div>
+            </a>
+        </div>
+
+        <!-- Buton suplimentar către oracle-quiz-100 -->
+        <div class="extra-actions">
+            <a class="cta-button" href="oracle-quiz-100/index.html" aria-label="Deschide Oracle Quiz 100">
+                <span class="cta-emoji">🧠</span>
+                <span>Oracle Quiz 100</span>
             </a>
         </div>
     </div>
